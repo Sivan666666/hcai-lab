@@ -201,7 +201,7 @@ function render(){
  const groupGallery=`<section class="group-gallery" aria-label="${lang==='en'?'Lab group photos':'实验室合照'}"><div class="highlight-grid" tabindex="0" role="region" aria-label="${lang==='en'?'Group photo carousel':'合照轮播'}">${[1,2,3].map(i=>`<img src="assets/group/${i}.webp" width="1707" height="1280" alt="${lang==='en'?'HCAI LAB group photo':'HCAI LAB 团队合照'} ${i}" draggable="false">`).join('')}</div><div class="highlight-dots">${[1,2,3].map(i=>`<button type="button" data-slide="${i-1}" aria-label="${lang==='en'?'Show photo':'查看合照'} ${i}" aria-pressed="${i===2}"><span></span></button>`).join('')}</div></section>`;
  const demoVideo=(i,label)=>`<video autoplay muted loop playsinline preload="metadata" poster="assets/highlights/feishu-${i}.jpg" aria-label="${label}"><source src="assets/highlights/feishu-${i}.mp4" type="video/mp4"></video>`;
  const home=page==='index'?`<main id="main" class="home-page">
-  <section class="home-reel" aria-label="${lang==='en'?'Robot demonstrations':'机器人演示'}"><div class="highlight-grid" tabindex="0" role="region" aria-label="${lang==='en'?'Video carousel':'视频轮播'}">${[1,2,3,4,5].map(i=>demoVideo(i,`${lang==='en'?'Robot demonstration':'机器人演示'} ${i}`)).join('')}</div><div class="highlight-dots">${[1,2,3,4,5].map(i=>`<button type="button" data-slide="${i-1}" aria-label="${lang==='en'?'Show video':'查看视频'} ${i}" aria-pressed="${i===2}"><span></span></button>`).join('')}</div></section>
+  <section class="home-reel" aria-label="${lang==='en'?'Robot demonstrations':'机器人演示'}"><div class="highlight-grid" tabindex="0" role="region" aria-label="${lang==='en'?'Video carousel':'视频轮播'}">${[1,3,2,4,5].map((video,i)=>demoVideo(video,`${lang==='en'?'Robot demonstration':'机器人演示'} ${i+1}`)).join('')}</div><div class="highlight-dots">${[1,2,3,4,5].map(i=>`<button type="button" data-slide="${i-1}" aria-label="${lang==='en'?'Show video':'查看视频'} ${i}" aria-pressed="${i===3}"><span></span></button>`).join('')}</div></section>
   <section class="lab-intro" aria-label="${lang==='en'?'About HCAI LAB':'实验室简介'}"><div class="lab-intro-inner"><p>${labIntro[lang]}</p></div></section>
   <section class="home-projects" aria-labelledby="highlights-title"><h2 id="highlights-title" lang="en">Highlights</h2><div class="home-project-list">${[
    {video:2,title:lang==='en'?'Humanoid jumping':'人形机器人跳跃'},
@@ -219,7 +219,7 @@ function render(){
   const position=i=>slides[i].offsetLeft-track.offsetLeft-(track.clientWidth-slides[i].clientWidth)/2;
   const current=()=>slides.reduce((best,_,i)=>Math.abs(track.scrollLeft-position(i))<Math.abs(track.scrollLeft-position(best))?i:best,0);
   const go=i=>track.scrollTo({left:position(Math.max(0,Math.min(slides.length-1,i))),behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth'});
-  track.scrollLeft=position(1);
+  track.scrollLeft=position(page==='index'?2:1);
   dots.forEach((dot,i)=>dot.addEventListener('click',()=>go(i)));
   track.addEventListener('scroll',()=>{const active=current();dots.forEach((d,i)=>d.setAttribute('aria-pressed',String(i===active)))},{passive:true});
   track.addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key==='ArrowLeft'){e.preventDefault();go(current()+(e.key==='ArrowRight'?1:-1))}});
